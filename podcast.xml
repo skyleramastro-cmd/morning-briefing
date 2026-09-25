@@ -1,6 +1,34 @@
-<?xml version='1.0' encoding='utf-8'?>
-<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:ns0="http://www.w3.org/2000/xmlns/" ns0:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0"><channel><title>Skyler's Daily Morning Briefing</title><link>https://skyleramastro-cmd.github.io/morning-briefing</link><description>Private executive briefing delivered by Alfred and the Cabinet.</description><language>en-us</language><itunes:author>Alfred</itunes:author><itunes:explicit>false</itunes:explicit><itunes:image href="https://skyleramastro-cmd.github.io/morning-briefing/cover_today.jpg" /><itunes:category text="News" /><image><url>https://skyleramastro-cmd.github.io/morning-briefing/cover_today.jpg</url><title>Skyler's Daily Morning Briefing</title><link>https://skyleramastro-cmd.github.io/morning-briefing</link></image><item><title>Briefing — Friday, September 25, 2026</title><description>Good morning, sir. This is Alfred with your morning briefing for Friday, September 25, 2026. 
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>Skyler's Daily Morning Briefing</title>
+    <link>https://skyleramastro-cmd.github.io/morning-briefing</link>
+    <description>Private executive briefing delivered by Alfred and the Cabinet.</description>
+    <language>en-us</language>
+    <itunes:author>Alfred</itunes:author>
+    <itunes:summary>Private executive briefing delivered by Alfred and the Cabinet.</itunes:summary>
+    <itunes:type>episodic</itunes:type>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:category text="News"/>
+    <itunes:image href="https://skyleramastro-cmd.github.io/morning-briefing/cover_today.jpg"/>
+    <image>
+      <url>https://skyleramastro-cmd.github.io/morning-briefing/cover_today.jpg</url>
+      <title>Skyler's Daily Morning Briefing</title>
+      <link>https://skyleramastro-cmd.github.io/morning-briefing</link>
+    </image>
+    <item>
+      <title>Briefing — Friday, September 25, 2026</title>
+      <description>Good morning, sir. This is Alfred with your morning briefing for Friday, September 25, 2026. 
 
 Your cabinet is operational and standing by. Tony has your training and nutrition targets calibrated, Pam has your calendar and student schedule organized to protect your midday focus, and Chewbacca is monitoring your fleet and workshop mechanicals.
 
-The weather in St. Petersburg is favorable for outdoor work and active recreation. Have a disciplined and productive day, sir.</description><enclosure url="https://skyleramastro-cmd.github.io/morning-briefing/briefing_today.mp3" length="479025" type="audio/mpeg" /><guid isPermaLink="false">briefing-2026-09-25</guid><pubDate>Fri, 25 Sep 2026 19:26:24 -0400</pubDate><itunes:duration>60</itunes:duration><itunes:explicit>false</itunes:explicit><itunes:image href="https://skyleramastro-cmd.github.io/morning-briefing/cover_today.jpg" /></item></channel></rss>
+The weather in St. Petersburg is favorable for outdoor work and active recreation. Have a disciplined and productive day, sir.</description>
+      <pubDate>Fri, 25 Sep 2026 19:34:40 -0400</pubDate>
+      <enclosure url="https://skyleramastro-cmd.github.io/morning-briefing/briefing_today.mp3" length="475263" type="audio/mpeg"/>
+      <guid isPermaLink="false">briefing-2026-09-25</guid>
+      <itunes:duration>60</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:image href="https://skyleramastro-cmd.github.io/morning-briefing/cover_today.jpg"/>
+    </item>
+  </channel>
+</rss>
