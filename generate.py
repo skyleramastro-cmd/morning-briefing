@@ -3,7 +3,6 @@ import requests
 import datetime
 import pytz
 from PIL import Image, ImageDraw
-import xml.etree.ElementTree as ET
 
 VOICE_ID = "JBFqnCBsd6RMkjVDRZzb"  # George
 MODEL_ID = "eleven_turbo_v2_5"
@@ -19,6 +18,7 @@ tz = pytz.timezone("America/New_York")
 now = datetime.datetime.now(tz)
 date_display = now.strftime("%A, %B %d, %Y")
 iso_date = now.strftime("%Y-%m-%d")
+pub_date = now.strftime("%a, %d %b %Y %H:%M:%S %z")
 
 briefing_text = f"""Good morning, sir. This is Alfred with your morning briefing for {date_display}. 
 
@@ -50,7 +50,7 @@ with open(audio_filename, "wb") as f:
 
 audio_size = os.path.getsize(audio_filename)
 
-# 2. 1400x1400 Square Cover Art (Required for YouTube Music)
+# 2. 1400x1400 Square Cover Art
 print("Rendering 1400x1400 square cover art...")
 img = Image.new("RGB", (1400, 1400), color=(15, 20, 26))
 draw = ImageDraw.Draw(img)
@@ -71,43 +71,40 @@ draw.text((130, 800), "• REGINA (Media): Evening Wind-Down Briefing Scheduled"
 cover_filename = "cover_today.jpg"
 img.save(cover_filename, "JPEG", quality=90)
 
-# 3. RSS 2.0 XML with iTunes tags
+# 3. Clean, Compliant RSS 2.0 XML
 print("Writing compliant podcast.xml...")
-ITUNES_NS = "http://www.itunes.com/dtds/podcast-1.0.dtd"
-ET.register_namespace("itunes", ITUNES_NS)
+clean_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>Skyler's Daily Morning Briefing</title>
+    <link>{BASE_URL}</link>
+    <description>Private executive briefing delivered by Alfred and the Cabinet.</description>
+    <language>en-us</language>
+    <itunes:author>Alfred</itunes:author>
+    <itunes:summary>Private executive briefing delivered by Alfred and the Cabinet.</itunes:summary>
+    <itunes:type>episodic</itunes:type>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:category text="News"/>
+    <itunes:image href="{BASE_URL}/{cover_filename}"/>
+    <image>
+      <url>{BASE_URL}/{cover_filename}</url>
+      <title>Skyler's Daily Morning Briefing</title>
+      <link>{BASE_URL}</link>
+    </image>
+    <item>
+      <title>Briefing — {date_display}</title>
+      <description>{briefing_text}</description>
+      <pubDate>{pub_date}</pubDate>
+      <enclosure url="{BASE_URL}/{audio_filename}" length="{audio_size}" type="audio/mpeg"/>
+      <guid isPermaLink="false">briefing-{iso_date}</guid>
+      <itunes:duration>60</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+      <itunes:image href="{BASE_URL}/{cover_filename}"/>
+    </item>
+  </channel>
+</rss>"""
 
-rss = ET.Element("rss", version="2.0", attrib={"{http://www.w3.org/2000/xmlns/}itunes": ITUNES_NS})
-channel = ET.SubElement(rss, "channel")
+with open("podcast.xml", "w", encoding="utf-8") as f:
+    f.write(clean_xml)
 
-ET.SubElement(channel, "title").text = "Skyler's Daily Morning Briefing"
-ET.SubElement(channel, "link").text = BASE_URL
-ET.SubElement(channel, "description").text = "Private executive briefing delivered by Alfred and the Cabinet."
-ET.SubElement(channel, "language").text = "en-us"
-ET.SubElement(channel, f"{{{ITUNES_NS}}}author").text = "Alfred"
-ET.SubElement(channel, f"{{{ITUNES_NS}}}explicit").text = "false"
-ET.SubElement(channel, f"{{{ITUNES_NS}}}image", attrib={"href": f"{BASE_URL}/{cover_filename}"})
-
-category = ET.SubElement(channel, f"{{{ITUNES_NS}}}category", attrib={"text": "News"})
-
-image = ET.SubElement(channel, "image")
-ET.SubElement(image, "url").text = f"{BASE_URL}/{cover_filename}"
-ET.SubElement(image, "title").text = "Skyler's Daily Morning Briefing"
-ET.SubElement(image, "link").text = BASE_URL
-
-item = ET.SubElement(channel, "item")
-ET.SubElement(item, "title").text = f"Briefing — {date_display}"
-ET.SubElement(item, "description").text = briefing_text
-ET.SubElement(item, "enclosure", attrib={
-    "url": f"{BASE_URL}/{audio_filename}",
-    "length": str(audio_size),
-    "type": "audio/mpeg"
-})
-ET.SubElement(item, "guid", attrib={"isPermaLink": "false"}).text = f"briefing-{iso_date}"
-ET.SubElement(item, "pubDate").text = now.strftime("%a, %d %b %Y %H:%M:%S %z")
-ET.SubElement(item, f"{{{ITUNES_NS}}}duration").text = "60"
-ET.SubElement(item, f"{{{ITUNES_NS}}}explicit").text = "false"
-ET.SubElement(item, f"{{{ITUNES_NS}}}image", attrib={"href": f"{BASE_URL}/{cover_filename}"})
-
-tree = ET.ElementTree(rss)
-tree.write("podcast.xml", encoding="utf-8", xml_declaration=True)
-print("podcast.xml written successfully.")
+print("podcast.xml written cleanly.")
