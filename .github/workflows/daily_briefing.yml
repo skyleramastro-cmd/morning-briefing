@@ -1,0 +1,36 @@
+name: Generate Morning Briefing
+
+on:
+  schedule:
+    - cron: '30 10 * * *' # Runs at 6:30 AM EDT (10:30 UTC) every morning
+  workflow_dispatch: # Allows you to run it manually with a single click anytime
+
+jobs:
+  run-briefing:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install requests pillow pytz
+
+      - name: Execute Briefing Generator
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: python generate.py
+
+      - name: Commit and Push New Audio & Feed
+        run: |
+          git config --global user.name 'Alfred-Bot'
+          git config --global user.email 'alfred@mastro.local'
+          git add briefing_today.mp3 cover_today.jpg podcast.xml
+          git commit -m "Automated Morning Briefing $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git push
