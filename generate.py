@@ -107,4 +107,43 @@ clean_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
 with open("podcast.xml", "w", encoding="utf-8") as f:
     f.write(clean_xml)
 
-print("podcast.xml written cleanly.")
+# 4. Generate Web Player Homepage (Fixes Root 404 Error)
+html_content = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skyler's Daily Morning Briefing</title>
+  <style>
+    body {{ background: #0f141a; color: #f0f0f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; text-align: center; }}
+    .card {{ background: #18202a; border: 1px solid #283444; border-radius: 16px; padding: 32px; max-width: 500px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }}
+    img {{ width: 100%; border-radius: 12px; margin-bottom: 24px; border: 1px solid #3b4d66; }}
+    h1 {{ color: #d4af37; font-size: 22px; margin-top: 0; }}
+    h2 {{ color: #64c8ff; font-size: 16px; font-weight: normal; margin-bottom: 20px; }}
+    audio {{ width: 100%; margin-top: 15px; border-radius: 8px; }}
+    .btn {{ display: inline-block; margin-top: 20px; background: #d4af37; color: #0f141a; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; }}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="cover_today.jpg" alt="Cover Art">
+    <h1>Skyler's Morning Briefing</h1>
+    <h2>{date_display}</h2>
+    <audio controls autoplay>
+      <source src="briefing_today.mp3" type="audio/mpeg">
+      Your browser does not support audio playback.
+    </audio>
+    <br>
+    <a class="btn" href="podcast.xml">View RSS XML Feed</a>
+  </div>
+</body>
+</html>"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+# 5. Disable Jekyll
+with open(".nojekyll", "w") as f:
+    f.write("")
+
+print("index.html and .nojekyll generated.")
