@@ -5,11 +5,21 @@ on:
     - cron: '30 10 * * *' # 6:30 AM EDT daily
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
 jobs:
   run-briefing:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -34,3 +44,15 @@ jobs:
           git add briefing_today.mp3 cover_today.jpg podcast.xml
           git commit -m "Automated Morning Briefing $(date +'%Y-%m-%d')" || echo "No changes to commit"
           git push
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
